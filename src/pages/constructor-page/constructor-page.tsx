@@ -6,12 +6,17 @@ import { BurgerIngredients } from '../../components';
 import { BurgerConstructor } from '../../components';
 import { Preloader } from '../../components/ui';
 import { FC, useEffect } from 'react';
-import { getIngredients } from '../../services/slices/ingredientsSlice';
+import {
+  getIngredients,
+  getIngredientsLoading,
+  getIngredientsSelector
+} from '../../services/slices/ingredientsSlice';
 
 export const ConstructorPage: FC = () => {
   /** TODO: взять переменную из стора */
   const dispatch = useDispatch();
-  const { ingredients, isLoading } = useSelector((state) => state.ingredients);
+  const isLoading = useSelector(getIngredientsLoading);
+  const ingredients = useSelector(getIngredientsSelector);
 
   useEffect(() => {
     if (ingredients.length === 0) {

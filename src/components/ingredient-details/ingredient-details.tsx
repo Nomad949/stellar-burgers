@@ -3,14 +3,16 @@ import { Preloader } from '../ui/preloader';
 import { IngredientDetailsUI } from '../ui/ingredient-details';
 import { useDispatch, useSelector } from '../../services/store';
 import { useParams } from 'react-router-dom';
-import { getIngredients } from '../../services/slices/ingredientsSlice';
+import {
+  getIngredients,
+  getIngredientsSelector
+} from '../../services/slices/ingredientsSlice';
 
 export const IngredientDetails: FC = () => {
   /** TODO: взять переменную из стора */
   const dispatch = useDispatch();
-  const ingredients = useSelector((state) => state.ingredients.ingredients);
+  const ingredients = useSelector(getIngredientsSelector);
   let currentId = useParams().id;
-  const [ingredientData] = ingredients.filter((item) => item._id === currentId);
 
   useEffect(() => {
     if (ingredients.length === 0) {
@@ -18,6 +20,7 @@ export const IngredientDetails: FC = () => {
     }
   }, [ingredients.length]);
 
+  const [ingredientData] = ingredients.filter((item) => item._id === currentId);
   if (!ingredientData) {
     return <Preloader />;
   }
