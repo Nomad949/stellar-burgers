@@ -8,7 +8,7 @@ import { getBurgerItemsSelector } from '../../services/slices/constructorSlice';
 export const IngredientsCategory = forwardRef<
   HTMLUListElement,
   TIngredientsCategoryProps
->(({ title, titleRef, ingredients }, ref) => {
+>(({ title, titleRef, ingredients, ...props }, ref) => {
   /** TODO: взять переменную из стора */
   const burgerConstructor = useSelector(getBurgerItemsSelector);
 
@@ -30,6 +30,7 @@ export const IngredientsCategory = forwardRef<
       ingredients={ingredients}
       ingredientsCounters={ingredientsCounters}
       ref={ref}
+      {...props}
     />
   );
 });
