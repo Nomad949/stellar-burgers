@@ -7,7 +7,7 @@ import {
   TLoginData,
   TRegisterData,
   updateUserApi
-} from '@api';
+} from '../../utils/burger-api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { deleteCookie, getCookie, setCookie } from '../../utils/cookie';
@@ -19,7 +19,7 @@ type TUserState = {
   error: string | null;
 };
 
-const initialState: TUserState = {
+export const initialState: TUserState = {
   user: null,
   isAuthChecked: false,
   isLoading: false,
@@ -109,15 +109,12 @@ export const userSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(
-        registerUser.fulfilled,
-        (state, action: PayloadAction<TAuthResponse>) => {
-          state.user = action.payload.user;
-          state.isAuthChecked = true;
-          state.isLoading = false;
-          state.error = null;
-        }
-      )
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.isAuthChecked = true;
+        state.isLoading = false;
+        state.error = null;
+      })
       .addCase(registerUser.rejected, (state, action) => {
         state.isAuthChecked = true;
         state.isLoading = false;
@@ -127,19 +124,16 @@ export const userSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(
-        loginUser.fulfilled,
-        (state, action: PayloadAction<TAuthResponse>) => {
-          state.user = action.payload.user;
-          state.isAuthChecked = true;
-          state.isLoading = false;
-          state.error = null;
-        }
-      )
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.isAuthChecked = true;
+        state.isLoading = false;
+        state.error = null;
+      })
       .addCase(loginUser.rejected, (state, action) => {
         state.isAuthChecked = true;
         state.isLoading = false;
-        state.error = action.error.message || 'Возникла ошибка при входе';
+        state.error = action.error.message || 'Возникла ошибка авторизации';
       })
       .addCase(updateUser.pending, (state) => {
         state.isLoading = true;
@@ -147,11 +141,13 @@ export const userSlice = createSlice({
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.user = action.payload.user;
+        state.isAuthChecked = true;
         state.isLoading = false;
         state.error = null;
       })
       .addCase(updateUser.rejected, (state, action) => {
         state.isLoading = false;
+        state.isAuthChecked = true;
         state.error =
           action.error.message || 'Ошибка обновления данных пользователя';
       });

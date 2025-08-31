@@ -4,7 +4,7 @@ import {
   getOrdersApi,
   orderBurgerApi,
   TFeedsResponse
-} from '@api';
+} from '../../utils/burger-api';
 import {
   createAsyncThunk,
   createSelector,
@@ -22,7 +22,7 @@ type TOrderState = {
   error: string | null;
 };
 
-const initialState: TOrderState = {
+export const initialState: TOrderState = {
   myOrders: null,
   ordersFeed: null,
   orderByNumber: null,
@@ -54,12 +54,9 @@ export const getOrderByNumber = createAsyncThunk(
 );
 
 export const ordersSlice = createSlice({
-  name: 'orders',
+  name: 'order',
   initialState,
   reducers: {
-    setOrderRequest: (state) => {
-      state.orderRequest = true;
-    },
     resetOrderModalData: (state) => {
       state.orderModalData = null;
     }
@@ -91,6 +88,7 @@ export const ordersSlice = createSlice({
       })
       .addCase(orderBurger.fulfilled, (state, action) => {
         state.orderModalData = action.payload.order;
+        state.orderRequest = false;
         state.error = null;
       })
       .addCase(orderBurger.rejected, (state, action) => {
